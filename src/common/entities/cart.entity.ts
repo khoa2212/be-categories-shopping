@@ -4,22 +4,19 @@ import {
   DataType,
   Default,
   DeletedAt,
+  HasMany,
   Model,
   Table,
   UpdatedAt,
-  BelongsTo,
-  ForeignKey,
-  HasMany,
 } from 'sequelize-typescript';
-import { Category } from './category.entity';
 import { ProductCart } from './product-cart.entity';
 
 @Table({
-  tableName: 'products',
+  tableName: 'carts',
   timestamps: false,
   paranoid: true,
 })
-export class Product extends Model<Product> {
+export class Cart extends Model<Cart> {
   @Column({
     field: 'id',
     type: DataType.UUID,
@@ -27,16 +24,6 @@ export class Product extends Model<Product> {
     primaryKey: true,
   })
   id: string;
-
-  @Column({ field: 'prodName', type: DataType.STRING })
-  prodName: string;
-
-  @Column({ field: 'prodPrice', type: DataType.FLOAT })
-  prodPrice: number;
-
-  @ForeignKey(() => Category)
-  @Column({ field: 'prodCategory', type: DataType.UUID })
-  prodCategory: string;
 
   @DeletedAt
   @Column({ field: 'deletedAt' })
@@ -52,9 +39,6 @@ export class Product extends Model<Product> {
   updatedAt: Date;
 
   //---- association ----//
-
-  @BelongsTo(() => Category)
-  category: Category;
 
   @HasMany(() => ProductCart)
   productCarts: ProductCart[];

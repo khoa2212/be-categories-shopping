@@ -9,17 +9,16 @@ import {
   UpdatedAt,
   BelongsTo,
   ForeignKey,
-  HasMany,
 } from 'sequelize-typescript';
-import { Category } from './category.entity';
-import { ProductCart } from './product-cart.entity';
+import { Product } from './product.entity';
+import { Cart } from './cart.entity';
 
 @Table({
-  tableName: 'products',
+  tableName: 'products_carts',
   timestamps: false,
   paranoid: true,
 })
-export class Product extends Model<Product> {
+export class ProductCart extends Model<ProductCart> {
   @Column({
     field: 'id',
     type: DataType.UUID,
@@ -28,15 +27,16 @@ export class Product extends Model<Product> {
   })
   id: string;
 
-  @Column({ field: 'prodName', type: DataType.STRING })
-  prodName: string;
+  @ForeignKey(() => Product)
+  @Column({ field: 'prodId', type: DataType.UUID })
+  prodId: string;
 
-  @Column({ field: 'prodPrice', type: DataType.FLOAT })
-  prodPrice: number;
+  @ForeignKey(() => Cart)
+  @Column({ field: 'cartId', type: DataType.UUID })
+  cartId: string;
 
-  @ForeignKey(() => Category)
-  @Column({ field: 'prodCategory', type: DataType.UUID })
-  prodCategory: string;
+  @Column({ field: 'quantity', type: DataType.NUMBER })
+  quantity: number;
 
   @DeletedAt
   @Column({ field: 'deletedAt' })
@@ -53,9 +53,9 @@ export class Product extends Model<Product> {
 
   //---- association ----//
 
-  @BelongsTo(() => Category)
-  category: Category;
+  @BelongsTo(() => Product)
+  product: Product;
 
-  @HasMany(() => ProductCart)
-  productCarts: ProductCart[];
+  @BelongsTo(() => Cart)
+  cart: Cart;
 }
